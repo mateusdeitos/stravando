@@ -1,70 +1,54 @@
-import { Stat, StatLabel, StatNumber, Spinner, VStack } from "@chakra-ui/react";
-import axios from "axios";
-import { signOut, useSession } from "next-auth/client";
-import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react"
+import { Spinner, VStack, Flex, Icon, Heading, Text, Stack } from "@chakra-ui/react";
+import React from "react"
+import { FaBiking, FaRunning, FaSwimmer } from "react-icons/fa";
+import { DistanceData } from "../../pages";
 
-interface SummaryProps {
-	fetchUrl: string;
-}
+type Props = {
+	isLoading: boolean;
+} & DistanceData;
 
-interface DataProps {
-	biggest_ride_distance: number;
-	all_ride_totals: { count: number; distance: number; moving_time: number; elapsed_time: number; elevation_gain: number; };
-	all_run_totals: { count: number; distance: number; moving_time: number; elapsed_time: number; elevation_gain: number; };
-	all_swim_totals: { count: number; distance: number; moving_time: number; elapsed_time: number; elevation_gain: number; };
-	biggest_climb_elevation_gain: number | null;
-	recent_ride_totals: { count: number; distance: number; moving_time: number; elapsed_time: number; elevation_gain: number; };
-	recent_run_totals: { count: number; distance: number; moving_time: number; elapsed_time: number; elevation_gain: number; };
-	recent_swim_totals: { count: number; distance: number; moving_time: number; elapsed_time: number; elevation_gain: number; };
-	ytd_ride_totals: { count: number; distance: number; moving_time: number; elapsed_time: number; elevation_gain: number; };
-	ytd_run_totals: { count: number; distance: number; moving_time: number; elapsed_time: number; elevation_gain: number; };
-	ytd_swim_totals: { count: number; distance: number; moving_time: number; elapsed_time: number; elevation_gain: number; };
-}
-
-export const Summary = ({ fetchUrl }: SummaryProps) => {
-	const router = useRouter();
-	const [data, setData] = useState<DataProps>({} as DataProps);
-	const [isLoading, setIsLoading] = useState(true);
-	const [session] = useSession();
-	useEffect(() => {
-		const getUserStats = async () => {
-			try {
-				const response = await axios.get(`https://www.strava.com/${fetchUrl}`, {
-					headers: {
-						Authorization: `Bearer ${session.account.accessToken}`
-					}
-				})
-
-				console.log(response.data);
-				setData(response.data);
-				setIsLoading(false);
-			} catch (error) {
-				const { url } = await signOut({ callbackUrl: '/', redirect: false })
-				router.replace(url);
-			}
-		}
-
-		if (isLoading) {
-			getUserStats();
-		};
-
-	}, [isLoading, fetchUrl, session.account.accessToken, router]);
+export const Summary = ({ bike, running, swimming, isLoading }: Props) => {
+	if (isLoading) {
+		return <Spinner />
+	}
 
 	return (
 		<>
-			{!isLoading ? (
-				<VStack d="flex" maxW={700} direction="column">
-					<Stat flex="1" w="100%">
-						<StatLabel>Maior distância percorrida de bike</StatLabel>
-						<StatNumber>{data.biggest_ride_distance / 1000} km</StatNumber>
-					</Stat>
-					<Stat flex="1" w="100%">
-						<StatLabel>Distância total de bike</StatLabel>
-						<StatNumber>{data.all_ride_totals.distance / 1000} km</StatNumber>
-					</Stat>
-				</VStack>
-			) : <Spinner />}
+			<Stack direction={["column", "row"]}>
+				<SummaryCard type="bike" biggest={bike.biggest} total={bike.total} />
+				<SummaryCard type="running" biggest={running.biggest} total={running.total} />
+				<SummaryCard type="swimming" biggest={swimming.biggest} total={swimming.total} />
+			</Stack>
 		</>
+	)
+}
+
+interface CardProps {
+	biggest: string;
+	total: string;
+	type: 'running' | 'bike' | 'swimming';
+}
+
+const SummaryCard = ({ biggest = '0', total = '0', type }: CardProps) => {
+	const CardIcon = {
+		bike: FaBiking,
+		swimming: FaSwimmer,
+		running: FaRunning,
+	}[type];
+	
+	return (
+		<Flex p="1rem" bg="brand.300" borderRadius="md" direction="row" w="100%" alignItems="center">
+			<Icon as={CardIcon} boxSize="20" />
+			<VStack ml="1rem">
+				<Flex direction="column" width="100%">
+					<Text>Maior distância percorrida</Text>
+					<Heading>{biggest} km</Heading>
+				</Flex>
+				<Flex direction="column" width="100%">
+					<Text>Distância total</Text>
+					<Heading>{total} km</Heading>
+				</Flex>
+			</VStack>
+		</Flex>
 	)
 }

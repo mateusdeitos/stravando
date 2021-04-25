@@ -6,6 +6,10 @@ declare module "next-auth" {
 		accessToken: string;
 		id: string;
 		refreshToken: string;
+		athlete: {
+			firstname: string;
+			lastname: string;
+		}
 	}
   }
 }

@@ -7,7 +7,7 @@ const Stats = () => {
 
 	if (session) {
 		return (
-			<Header user={session.user as UserHeader} />
+			<Header  />
 		)
 	}
 
