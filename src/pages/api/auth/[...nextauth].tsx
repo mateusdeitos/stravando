@@ -11,8 +11,7 @@ const providers = [
 
 const callbacks = {
 	signIn: async function signIn(user, account) {
-		user.accessToken = account?.accessToken;
-		user.id = account?.id;
+		Object.assign(user, { account });
 		return true;
 	},
 	jwt: async function jwt(token, user) {

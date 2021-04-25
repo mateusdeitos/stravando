@@ -4,11 +4,12 @@ import { signIn, signOut, useSession, } from 'next-auth/client'
 import React from "react"
 import Link from 'next/link'
 import { FaChartLine, FaSignOutAlt, FaStrava } from 'react-icons/fa'
+import Head from "next/head"
+import { Summary } from "../components/Summary"
+import { Header } from "../components/Header"
 
 export default function Home() {
-	const router = useRouter();
 	const [session, loading] = useSession();
-
 
 	if (loading) {
 		return (
@@ -23,7 +24,10 @@ export default function Home() {
 			<Avatar showBorder borderColor="brand.500" size="2xl" src={session.user.image} name={session.user.name} />
 			<Heading>Olá {session.user.name}</Heading>
 			<Link href="/stats">
-				<Button as="a" cursor="pointer" leftIcon={<Icon as={FaChartLine} />} mt="6" colorScheme="whiteAlpha" >Ver minhas estatísticas</Button>
+				<>
+					<Summary fetchUrl={`api/v3/athletes/${session.account.id}/stats`} />
+					<Button as="a" cursor="pointer" leftIcon={<Icon as={FaChartLine} />} mt="6" colorScheme="whiteAlpha" >Ver minhas estatísticas</Button>
+				</>
 			</Link>
 			<Button leftIcon={<Icon as={FaSignOutAlt} />} mt="6" colorScheme="orange" onClick={() => signOut()}>Sair</Button>
 		</Wrapper >
@@ -35,15 +39,24 @@ export default function Home() {
 	)
 }
 
-const Wrapper: React.FC<StackProps> = ({ children, ...rest }) => (
-	< VStack
-		w="100vw"
-		h="100vh"
-		align="center"
-		justify="center"
-		{...rest}
-	>
-		{ children}
-	</VStack >
-)
+const Wrapper: React.FC<StackProps> = ({ children, ...rest }) => {
+	const [session, loading] = useSession();
+	return (
+		<>
+			<Head>
+				<title>Home | Stravando</title>
+			</Head>
+			<Header user={{ image: session?.user?.image, name: session?.user?.name }} />
+			< VStack
+				w="100vw"
+				h="100vh"
+				align="center"
+				justify="center"
+				{...rest}
+			>
+				{children}
+			</VStack >
+		</>
+	)
+}
 

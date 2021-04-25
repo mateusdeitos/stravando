@@ -29,8 +29,8 @@ export const Header = ({ user }: HeaderProps) => {
 				</Link>
 				<HStack h="100%" spacing="10" >
 					<VStack py="0.5rem">
-						<Avatar showBorder size="md" name={user.name} src={user.image} />
-						<Text fontWeight="600">{user.name}</Text>
+						<Avatar showBorder size="md" name={user.name || "fulano"} src={user.image || ""} />
+						<Text fontWeight="600">{user.name || "fulano"}</Text>
 					</VStack>
 					<Tooltip hasArrow placement="bottom" bg="brand.200" label="Sair">
 						<IconButton
