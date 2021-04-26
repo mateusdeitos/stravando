@@ -2,6 +2,7 @@ import { Spinner, VStack, Flex, Icon, Heading, Text, Stack } from "@chakra-ui/re
 import React from "react"
 import { FaBiking, FaRunning, FaSwimmer } from "react-icons/fa";
 import { DistanceData } from "../../pages";
+import { formatNumber } from "../../utils/format";
 
 type Props = {
 	isLoading: boolean;
@@ -24,12 +25,12 @@ export const Summary = ({ bike, running, swimming, isLoading }: Props) => {
 }
 
 interface CardProps {
-	biggest: string;
-	total: string;
+	biggest: number;
+	total: number;
 	type: 'running' | 'bike' | 'swimming';
 }
 
-const SummaryCard = ({ biggest = '0', total = '0', type }: CardProps) => {
+const SummaryCard = ({ biggest = 0, total = 0, type }: CardProps) => {
 	const CardIcon = {
 		bike: FaBiking,
 		swimming: FaSwimmer,
@@ -42,11 +43,11 @@ const SummaryCard = ({ biggest = '0', total = '0', type }: CardProps) => {
 			<VStack ml="1rem">
 				<Flex direction="column" width="100%">
 					<Text>Maior distância percorrida</Text>
-					<Heading>{biggest} km</Heading>
+					<Heading>{formatNumber(biggest)} km</Heading>
 				</Flex>
 				<Flex direction="column" width="100%">
 					<Text>Distância total</Text>
-					<Heading>{total} km</Heading>
+					<Heading>{formatNumber(total)} km</Heading>
 				</Flex>
 			</VStack>
 		</Flex>
