@@ -1,4 +1,5 @@
 import { signIn, useSession } from "next-auth/client";
+import { useRouter } from "next/router";
 import { createContext, useContext, useEffect, useState } from "react";
 import { api, DataProps } from "../../services/api";
 import { DistanceData } from "../pages";
@@ -12,6 +13,7 @@ interface StatsContextData {
 const StatsContext = createContext<StatsContextData>({} as StatsContextData);
 
 export const StatsProvider: React.FC = ({ children }) => {
+	const router = useRouter();
 	const [stats, setStats] = useState<DistanceData>(null);
 	const [isLoading, setIsLoading] = useState(false);
 	const [session] = useSession();
@@ -39,7 +41,7 @@ export const StatsProvider: React.FC = ({ children }) => {
 		} catch (error) {
 			console.log(error.response);
 			if (error.response.status === 401) {
-				signIn('strava');
+				router.push('/redirect');
 			}
 		}
 	}
@@ -65,7 +67,7 @@ export const StatsProvider: React.FC = ({ children }) => {
 		if (session) {
 			loadData();
 		} else {
-			setStats({} as DistanceData);
+			setStats(null);
 		}
 	}, [session])
 

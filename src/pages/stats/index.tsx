@@ -1,7 +1,7 @@
 import { Box, Heading, SimpleGrid, Stack, Flex, Icon, Image, Divider, Spinner } from "@chakra-ui/react";
 import { useSession } from "next-auth/client"
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { IconType } from "react-icons";
 import { FaBiking, FaRunning, FaSwimmer } from "react-icons/fa";
 import { DistanceData } from "..";
@@ -21,6 +21,7 @@ export const Stats = ({ isDemo = false }: StatsProps) => {
 	const [selectedModes, setSelectedModes] = useState<Modes>({ bike: true, running: true, swimming: true });
 
 	useEffect(() => {
+		console.log(data);
 		if (!session && !isDemo) {
 			router.push("/");
 		}
@@ -32,7 +33,7 @@ export const Stats = ({ isDemo = false }: StatsProps) => {
 			}, 0));
 		}
 
-	}, [session, router, isDemo, data, isLoading, selectedModes])
+	}, [session, router, isDemo, data, selectedModes])
 
 	const selectedModesString = () => {
 		const map = {
@@ -105,6 +106,7 @@ interface ImageBlockProps {
 const ImageBlock = ({ image, text, totalDistance, baseDistance }: ImageBlockProps) => {
 	const distance = formatNumber(totalDistance / baseDistance);
 	const formattedBaseDistance = baseDistance < 1 ? formatNumber(baseDistance * 1000) + 'm' : formatNumber(baseDistance) + 'km';
+
 	return (
 		<Box pos="relative" w="100%" bgColor="gray.700" borderRadius="xl">
 			<Image src={image} alt={text} h="100%" w="100%" object-fit="cover" filter="brightness(50%)" />

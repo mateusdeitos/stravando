@@ -1,10 +1,9 @@
-import { Button, Avatar, Heading, Spinner, Icon, Divider, Flex, VStack } from "@chakra-ui/react"
-import { signIn, useSession, } from 'next-auth/client'
-import React, { useEffect, useState } from "react"
+import { Button, Avatar, Heading, Spinner, Icon, Divider, VStack } from "@chakra-ui/react"
+import { useSession, } from 'next-auth/client'
+import React from "react"
 import Link from 'next/link'
 import { FaChartLine, FaMap } from 'react-icons/fa'
 import { Summary } from "../components/Summary"
-import { api, DataProps } from "../../services/api"
 import { PageWrapper } from "../components/PageWrapper"
 import { useStats } from "../contexts/StatsContext"
 
