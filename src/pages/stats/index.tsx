@@ -108,7 +108,7 @@ const ImageBlock = ({ image, text, totalDistance, baseDistance }: ImageBlockProp
 	return (
 		<Box pos="relative" w="100%" bgColor="gray.700" borderRadius="xl">
 			<Image src={image} alt={text} h="100%" w="100%" object-fit="cover" filter="brightness(50%)" />
-			<Heading fontSize={["1.5rem", "2.25rem"]} pos="absolute" top="50%" left="50%" transform="translate(-50%, -50%)">
+			<Heading fontSize={["1.25rem", "1.25rem", "2.25rem"]} pos="absolute" top="50%" left="50%" transform="translate(-50%, -50%)">
 				{distance} {text}
 				<Heading as="p" fontSize="1rem" textAlign="center">({formattedBaseDistance})</Heading>
 			</Heading>
