@@ -27,12 +27,12 @@ export const PageWrapper: React.FC<StackProps> = ({ children, ...rest }) => {
 					<Divider />
 					<Flex alignItems="center" mb="2rem">
 						<Text fontSize="1rem">Desenvolvido por&nbsp;</Text>
-						<Popover trigger="click" placement="top">
+						<Popover trigger="click" placement="top" >
 							<PopoverTrigger>
 								<Heading fontSize="1rem" fontWeight="600" color="brand.500" cursor="pointer" >Mateus Deitos</Heading>
 							</PopoverTrigger>
-							<PopoverContent bg="gray.800">
-								<PopoverHeader>
+							<PopoverContent bg="gray.800" borderColor="gray.800">
+								<PopoverHeader borderColor="gray.800">
 									<Flex alignItems="center">
 										<Avatar mr="1rem" size="md" showBorder src="https://avatars.githubusercontent.com/u/8628316?v=4" />
 										<Heading fontSize="1rem">Mateus Deitos</Heading>
