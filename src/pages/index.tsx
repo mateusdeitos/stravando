@@ -22,16 +22,17 @@ export default function Home() {
 	const isWideVersion = useBreakpointValue({ base: false, lg: true });
 	const [session, loading] = useSession();
 	const { isLoading, stats } = useStats();
+	const pageTitle = "Home | Stravando";
 	if (loading || (isLoading && !stats)) {
 		return (
-			<PageWrapper>
+			<PageWrapper title={pageTitle}>
 				<Spinner size="xl" />
 			</PageWrapper>
 		)
 	}
 
 	return session && stats ? (
-		<PageWrapper direction="column" spacing="6">
+		<PageWrapper title={pageTitle} direction="column" spacing="6">
 			<VStack d="flex" direction="column" flex="1" alignItems="center">
 				<Avatar showBorder borderColor="brand.500" size="2xl" src={session.user.image} name={session.user.name} />
 				<Heading fontSize={["1.25rem", "2rem"]}>Olá {session.account.athlete.firstname} {session.account.athlete.lastname}</Heading>
@@ -44,7 +45,7 @@ export default function Home() {
 			</VStack>
 		</PageWrapper >
 	) : (
-		<PageWrapper>
+		<PageWrapper title={pageTitle}>
 			<VStack d="flex" direction="column" flex="1" w="100%" alignItems="center">
 
 				<Box pos="relative" w="100%" flex="1" bgColor="gray.700" >

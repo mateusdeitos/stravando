@@ -17,6 +17,7 @@ export const Stats = ({ isDemo = false }: StatsProps) => {
 	const [data] = useState(() => isDemo ? getDemoData() : stats);
 	const [totalDistance, setTotalDistance] = useState(0);
 	const [selectedModes, setSelectedModes] = useState<Modes>({ bike: true, running: true, swimming: true });
+	const pageTitle = isDemo ? "Demo | Stravando" : "Stats | Stravando";
 
 	useEffect(() => {
 		if (!isLoading && !data && !isDemo) {
@@ -43,14 +44,14 @@ export const Stats = ({ isDemo = false }: StatsProps) => {
 
 	if (isLoading && !data) {
 		return (
-			<PageWrapper>
+			<PageWrapper title={pageTitle}>
 				<Spinner />
 			</PageWrapper>
 		)
 	}
 
 	return (
-		<PageWrapper>
+		<PageWrapper title={pageTitle}>
 			{data ? (
 				<>
 					<Heading fontSize={["1.5rem", "3rem"]}>Meus stats...</Heading>

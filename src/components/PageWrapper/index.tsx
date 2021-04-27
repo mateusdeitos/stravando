@@ -4,11 +4,15 @@ import React from "react"
 import { FaEnvelope, FaGithub, FaInfoCircle, FaLinkedin } from "react-icons/fa"
 import { Header } from "../Header"
 
-export const PageWrapper: React.FC<StackProps> = ({ children, ...rest }) => {
+interface SEOProps {
+	title: string;
+}
+
+export const PageWrapper: React.FC<StackProps & SEOProps> = ({ title, children, ...rest }) => {
 	return (
 		<>
 			<Head>
-				<title>Home | Stravando</title>
+				<title>{title}</title>
 			</Head>
 			<Header />
 			< VStack
