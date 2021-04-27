@@ -1,5 +1,4 @@
 import { Box, Heading, SimpleGrid, Stack, Flex, Icon, Image, Divider, Spinner } from "@chakra-ui/react";
-import { useSession } from "next-auth/client"
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
 import { IconType } from "react-icons";
@@ -14,15 +13,13 @@ type Modes = Record<keyof DistanceData, boolean>;
 
 export const Stats = ({ isDemo = false }: StatsProps) => {
 	const router = useRouter();
-	const [session] = useSession();
 	const { isLoading, stats, getDemoData } = useStats();
 	const [data] = useState(() => isDemo ? getDemoData() : stats);
 	const [totalDistance, setTotalDistance] = useState(0);
 	const [selectedModes, setSelectedModes] = useState<Modes>({ bike: true, running: true, swimming: true });
 
 	useEffect(() => {
-		console.log(data);
-		if (!session && !isDemo) {
+		if (!isLoading && !data && !isDemo) {
 			router.push("/");
 		}
 
@@ -33,7 +30,7 @@ export const Stats = ({ isDemo = false }: StatsProps) => {
 			}, 0));
 		}
 
-	}, [session, router, isDemo, data, selectedModes])
+	}, [isLoading, router, isDemo, data, selectedModes])
 
 	const selectedModesString = () => {
 		const map = {
@@ -44,34 +41,42 @@ export const Stats = ({ isDemo = false }: StatsProps) => {
 		return Object.keys(map).filter(mode => selectedModes[mode]).map(mode => map[mode]).join(" + ");
 	}
 
+	if (isLoading && !data) {
+		return (
+			<PageWrapper>
+				<Spinner />
+			</PageWrapper>
+		)
+	}
+
 	return (
 		<PageWrapper>
-			<Heading fontSize={["1.5rem", "3rem"]}>Quão longe já fui...</Heading>
-			<Stack direction="row" spacing={["1"]}>
-				{data && (
-					<>
-						<FilterBadge selected={selectedModes.bike} total={data?.bike?.total || 0} CustomIcon={FaBiking} onClick={() => setSelectedModes({ ...selectedModes, bike: !selectedModes.bike })} />
-						<FilterBadge selected={selectedModes.running} total={data?.running?.total || 0} CustomIcon={FaRunning} onClick={() => setSelectedModes({ ...selectedModes, running: !selectedModes.running })} />
-						<FilterBadge selected={selectedModes.swimming} total={data?.swimming?.total || 0} CustomIcon={FaSwimmer} onClick={() => setSelectedModes({ ...selectedModes, swimming: !selectedModes.swimming })} />
-					</>
-				)}
-			</Stack>
-			<Heading fontSize={["1.5rem", "2rem"]} textAlign="center">{formatNumber(totalDistance)} km</Heading>
-			<Heading fontSize="0.75rem" fontWeight="normal">{selectedModesString()}</Heading>
-			<Divider margin="2rem 0	" />
-			<Heading fontSize="1.5rem" fontWeight="600" mb="2rem">Com essa distância você já fez:</Heading>
-			{isLoading ? (
-				<Spinner />
+			{data ? (
+				<>
+					<Heading fontSize={["1.5rem", "3rem"]}>Meus stats...</Heading>
+					<Stack direction="row" spacing={["1"]}>
+						<>
+							<FilterBadge selected={selectedModes.bike} total={data?.bike?.total || 0} CustomIcon={FaBiking} onClick={() => setSelectedModes({ ...selectedModes, bike: !selectedModes.bike })} />
+							<FilterBadge selected={selectedModes.running} total={data?.running?.total || 0} CustomIcon={FaRunning} onClick={() => setSelectedModes({ ...selectedModes, running: !selectedModes.running })} />
+							<FilterBadge selected={selectedModes.swimming} total={data?.swimming?.total || 0} CustomIcon={FaSwimmer} onClick={() => setSelectedModes({ ...selectedModes, swimming: !selectedModes.swimming })} />
+						</>
+					</Stack>
+					<Heading fontSize={["1.25rem", "2rem"]} textAlign="center">{formatNumber(totalDistance)} km</Heading>
+					<Heading fontSize="0.75rem" fontWeight="normal">{selectedModesString()}</Heading>
+					<Divider margin="2rem 0	" />
+					<Heading fontSize={["1rem", "1.5rem"]} fontWeight="600" mb="2rem">Com essa distância você já fez:</Heading>
+					<SimpleGrid w="100%" columns={[1, 2]} gap="1rem">
+						<ImageBlock image="/pool.svg" text="voltas em uma piscina olímpica" baseDistance={0.05} totalDistance={totalDistance} />
+						<ImageBlock image="/track.svg" text="voltas em uma pista de corrida" baseDistance={0.4} totalDistance={totalDistance} />
+						<ImageBlock image="/tour-france.svg" text="Tour de France finalizados" baseDistance={3470} totalDistance={totalDistance} />
+						<ImageBlock image="/brasil.svg" text="vezes cruzando o Brasil de norte a sul" baseDistance={4320} totalDistance={totalDistance} />
+						<ImageBlock image="/everest.svg" text="subidas no Monte Everest" baseDistance={8849} totalDistance={totalDistance} />
+						<ImageBlock image="/earth.svg" text="voltas ao redor da Terra" baseDistance={40000} totalDistance={totalDistance} />
+						<ImageBlock image="/moon.svg" text="viagens até a Lua" baseDistance={384400} totalDistance={totalDistance} />
+					</SimpleGrid>
+				</>
 			) : (
-				<SimpleGrid w="100%" columns={[1, 2]} gap="1rem">
-					<ImageBlock image="/pool.svg" text="voltas em uma piscina olímpica" baseDistance={0.05} totalDistance={totalDistance} />
-					<ImageBlock image="/track.svg" text="voltas em uma pista de corrida" baseDistance={0.4} totalDistance={totalDistance} />
-					<ImageBlock image="/earth.svg" text="Tour de France finalizados" baseDistance={3470} totalDistance={totalDistance} />
-					<ImageBlock image="/brasil.svg" text="vezes cruzando o Brasil de norte a sul" baseDistance={4320} totalDistance={totalDistance} />
-					<ImageBlock image="/everest.svg" text="subidas no Monte Everest" baseDistance={8849} totalDistance={totalDistance} />
-					<ImageBlock image="/earth.svg" text="voltas ao redor da Terra" baseDistance={40000} totalDistance={totalDistance} />
-					<ImageBlock image="/moon.svg" text="viagens até a Lua" baseDistance={384400} totalDistance={totalDistance} />
-				</SimpleGrid>
+				<Spinner />
 			)}
 		</PageWrapper>
 	)

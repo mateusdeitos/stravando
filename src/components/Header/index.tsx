@@ -19,7 +19,7 @@ export const Header = () => {
 	}
 
 	const handleSignIn = async () => {
-		signIn('strava');
+		signIn('strava', { callbackUrl: process.env.NEXT_PUBLIC_APP_URL });
 	}
 
 	return (
@@ -38,7 +38,7 @@ export const Header = () => {
 						) : (
 							!session && (
 								isWideVersion ? (
-									<Button leftIcon={<Icon as={FaStrava} />} colorScheme="brand" onClick={handleSignIn}>Conectar com Strava</Button>
+									<Button leftIcon={<Icon as={FaStrava} />} colorScheme="brand" borderColor="brand.800"borderWidth={1} onClick={handleSignIn}>Conectar com Strava</Button>
 								) : (
 									<IconButton
 										borderColor="brand.800"

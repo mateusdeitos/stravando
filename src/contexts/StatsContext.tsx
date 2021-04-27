@@ -1,4 +1,4 @@
-import { signIn, useSession } from "next-auth/client";
+import { useSession } from "next-auth/client";
 import { useRouter } from "next/router";
 import { createContext, useContext, useEffect, useState } from "react";
 import { api, DataProps } from "../../services/api";
@@ -66,8 +66,6 @@ export const StatsProvider: React.FC = ({ children }) => {
 	useEffect(() => {
 		if (session) {
 			loadData();
-		} else {
-			setStats(null);
 		}
 	}, [session])
 

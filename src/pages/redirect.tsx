@@ -8,17 +8,9 @@ const Redirect = () => {
 	const router = useRouter();
 	const [session] = useSession();
 	const [count, setCount] = useState(10);
-	const [isChecking, setIsChecking] = useState(true);
+	const [isChecking, setIsChecking] = useState(false);
 
 	useEffect(() => {
-		const sessionExpired = (Date.now() / 1000) >= session?.exp;
-		console.log(sessionExpired);
-		if (!sessionExpired) {
-			router.push("/");
-		} else {
-			setIsChecking(false);
-		}
-
 		let myTimeOut: NodeJS.Timeout;
 		myTimeOut = (
 			setTimeout(() => {
