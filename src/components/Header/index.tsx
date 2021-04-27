@@ -10,16 +10,16 @@ export type UserHeader = {
 	image: string;
 }
 
+export const handleSignIn = async () => {
+	signIn('strava', { callbackUrl: process.env.NEXT_PUBLIC_APP_URL });
+}
+
 export const Header = () => {
 	const isWideVersion = useBreakpointValue({ base: false, lg: true });
 	const [session] = useSession();
 	const router = useRouter();
 	const handleSignOut = async () => {
 		signOut({ redirect: false, callbackUrl: '/' }).then(() => router.push("/"));
-	}
-
-	const handleSignIn = async () => {
-		signIn('strava', { callbackUrl: process.env.NEXT_PUBLIC_APP_URL });
 	}
 
 	return (
