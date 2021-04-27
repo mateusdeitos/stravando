@@ -1,6 +1,6 @@
 import { Box, Heading, SimpleGrid, Stack, Flex, Icon, Image, Divider, Spinner } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IconType } from "react-icons";
 import { FaBiking, FaRunning, FaSwimmer } from "react-icons/fa";
 import { DistanceData } from "..";
@@ -56,9 +56,9 @@ export const Stats = ({ isDemo = false }: StatsProps) => {
 					<Heading fontSize={["1.5rem", "3rem"]}>Meus stats...</Heading>
 					<Stack direction="row" spacing={["1"]}>
 						<>
-							<FilterBadge selected={selectedModes.bike} total={data?.bike?.total || 0} CustomIcon={FaBiking} onClick={() => setSelectedModes({ ...selectedModes, bike: !selectedModes.bike })} />
-							<FilterBadge selected={selectedModes.running} total={data?.running?.total || 0} CustomIcon={FaRunning} onClick={() => setSelectedModes({ ...selectedModes, running: !selectedModes.running })} />
-							<FilterBadge selected={selectedModes.swimming} total={data?.swimming?.total || 0} CustomIcon={FaSwimmer} onClick={() => setSelectedModes({ ...selectedModes, swimming: !selectedModes.swimming })} />
+							<FilterBadge id="filter-badge-stats-bike" selected={selectedModes.bike} total={data?.bike?.total || 0} CustomIcon={FaBiking} onClick={() => setSelectedModes({ ...selectedModes, bike: !selectedModes.bike })} />
+							<FilterBadge id="filter-badge-stats-running" selected={selectedModes.running} total={data?.running?.total || 0} CustomIcon={FaRunning} onClick={() => setSelectedModes({ ...selectedModes, running: !selectedModes.running })} />
+							<FilterBadge id="filter-badge-stats-swimming" selected={selectedModes.swimming} total={data?.swimming?.total || 0} CustomIcon={FaSwimmer} onClick={() => setSelectedModes({ ...selectedModes, swimming: !selectedModes.swimming })} />
 						</>
 					</Stack>
 					<Heading fontSize={["1.25rem", "2rem"]} textAlign="center">{formatNumber(totalDistance)} km</Heading>
@@ -83,21 +83,22 @@ export const Stats = ({ isDemo = false }: StatsProps) => {
 }
 
 interface FilterBadgeProps {
+	id: string;
 	total: number;
 	CustomIcon: IconType;
 	onClick: () => void;
 	selected: boolean;
 }
 
-const FilterBadge = ({ total, CustomIcon, onClick, selected }: FilterBadgeProps) => {
+const FilterBadge = ({ id, total, CustomIcon, onClick, selected }: FilterBadgeProps) => {
 	const { isLoading } = useStats();
 	const color = selected ? "brand.700" : "brand.300";
 	const onHoverColor = selected ? "brand.300" : "brand.700";
 	const formattedTotal = formatNumber(total);
 	return (
-		<Flex bg={color} borderColor={color} borderWidth={3} _hover={{ borderColor: `${onHoverColor}`, transition: 'all 0.2s' }} as="button" onClick={onClick} p="1rem" minW="4rem" borderRadius="md" direction="column" w="100%" alignItems="center" justifyContent="center">
-			<Icon as={CustomIcon} boxSize="10" />
-			{isLoading ? <Spinner /> : <Heading whiteSpace={["normal", "nowrap"]} fontSize={["0.75rem", "1rem"]} mt="0.5rem">{formattedTotal} km</Heading>}
+		<Flex id={id} data-gtm={id} bg={color} borderColor={color} borderWidth={3} _hover={{ borderColor: `${onHoverColor}`, transition: 'all 0.2s' }} as="button" onClick={onClick} p="1rem" minW="4rem" borderRadius="md" direction="column" w="100%" alignItems="center" justifyContent="center">
+			<Icon as={CustomIcon} data-gtm={id} boxSize="10" />
+			{isLoading ? <Spinner /> : <Heading data-gtm={id} whiteSpace={["normal", "nowrap"]} fontSize={["0.75rem", "1rem"]} mt="0.5rem">{formattedTotal} km</Heading>}
 		</Flex>
 	)
 }

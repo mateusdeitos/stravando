@@ -38,7 +38,7 @@ export const Header = () => {
 						) : (
 							!session && (
 								isWideVersion ? (
-									<Button leftIcon={<Icon as={FaStrava} />} colorScheme="brand" borderColor="brand.800"borderWidth={1} onClick={handleSignIn}>Conectar com Strava</Button>
+									<Button leftIcon={<Icon as={FaStrava} />} colorScheme="brand" borderColor="brand.800"borderWidth={1} onClick={handleSignIn} data-gtm="conectar-strava-header">Conectar com Strava</Button>
 								) : (
 									<IconButton
 										borderColor="brand.800"
@@ -47,6 +47,7 @@ export const Header = () => {
 										icon={<Icon as={FaStrava} />}
 										onClick={handleSignIn}
 										aria-label="Conectar com Strava"
+										data-gtm="conectar-strava-header"
 									/>
 								)
 							)
@@ -61,6 +62,7 @@ export const Header = () => {
 								icon={<Icon as={FaSignOutAlt} />}
 								aria-label="Logout"
 								onClick={handleSignOut}
+								data-gtm="desconectar-strava-header"
 							/>
 						</Tooltip>
 					)}

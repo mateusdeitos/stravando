@@ -43,15 +43,15 @@ export const PageWrapper: React.FC<StackProps> = ({ children, ...rest }) => {
 								<PopoverBody>
 									<Flex alignItems="center">
 										<Icon as={FaLinkedin} boxSize={5} />
-										<ChakraLink ml=".5rem" href="https://www.linkedin.com/in/mateus-deitos/" cursor="pointer" isExternal fontWeight="600" color="blue.500" textDecoration="underline">Linkedin</ChakraLink>
+										<ChakraLink ml=".5rem" data-gtm="contato-linkedin" href="https://www.linkedin.com/in/mateus-deitos/" cursor="pointer" isExternal fontWeight="600" color="blue.500" textDecoration="underline">Linkedin</ChakraLink>
 									</Flex>
 									<Flex alignItems="center">
 										<Icon as={FaGithub} boxSize={5} />
-										<ChakraLink ml=".5rem" href="https://www.github.com/mateusdeitos/" cursor="pointer" isExternal fontWeight="600" color="blue.500" textDecoration="underline">Github</ChakraLink>
+										<ChakraLink ml=".5rem" data-gtm="contato-github" href="https://www.github.com/mateusdeitos/" cursor="pointer" isExternal fontWeight="600" color="blue.500" textDecoration="underline">Github</ChakraLink>
 									</Flex>
 									<Flex alignItems="center">
 										<Icon as={FaEnvelope} boxSize={5} />
-										<ChakraLink ml=".5rem" href="mailto:mate.deitos@hotmail.com" cursor="pointer" isExternal fontWeight="600" color="blue.500" textDecoration="underline">mate.deitos@hotmail.com</ChakraLink>
+										<ChakraLink ml=".5rem" data-gtm="contato-envelope" href="mailto:mate.deitos@hotmail.com" cursor="pointer" isExternal fontWeight="600" color="blue.500" textDecoration="underline">mate.deitos@hotmail.com</ChakraLink>
 									</Flex>
 								</PopoverBody>
 							</PopoverContent>

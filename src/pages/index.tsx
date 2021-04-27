@@ -36,7 +36,7 @@ export default function Home() {
 				<Avatar showBorder borderColor="brand.500" size="2xl" src={session.user.image} name={session.user.name} />
 				<Heading fontSize={["1.25rem", "2rem"]}>Olá {session.account.athlete.firstname} {session.account.athlete.lastname}</Heading>
 				<Link href="/stats">
-					<Button as="a" cursor="pointer" leftIcon={<Icon as={FaDumbbell} />} mt="6" minH="3rem" colorScheme="orange" >Ver meus stats</Button>
+					<Button as="a" cursor="pointer" leftIcon={<Icon as={FaDumbbell} />} mt="6" minH="3rem" colorScheme="orange" data-gtm="ver-meus-stats" >Ver meus stats</Button>
 				</Link>
 				<Divider />
 				<Heading fontSize={["1rem", "1.5rem"]}>Veja um pequeno resumo seu:</Heading>
@@ -54,9 +54,9 @@ export default function Home() {
 						<Heading textAlign="left" w="100%" fontSize={["1.25rem", "1.25rem", "2.25rem"]}>Faça login em sua conta do Strava para visualizar seus stats de uma forma bem top 👌👌</Heading>
 						{!isWideVersion && <Spacer />}
 						<Link href="/stats/demo">
-							<Button as="a" cursor="pointer" leftIcon={<Icon as={FaChartLine} />} mt="6" minW="20rem" minH="3rem" colorScheme="orange">Ver uma demonstração</Button>
+							<Button as="a" cursor="pointer" leftIcon={<Icon as={FaChartLine} />} mt="6" minW="20rem" minH="3rem" colorScheme="orange" data-gtm="ver-demo">Ver uma demonstração</Button>
 						</Link>
-						{!isWideVersion && <Button leftIcon={<Icon as={FaStrava} />} mt="1rem" minW="20rem" minH="3rem" colorScheme="orange" onClick={handleSignIn}>Conectar no Strava</Button>}
+						{!isWideVersion && <Button leftIcon={<Icon as={FaStrava} />} mt="1rem" minW="20rem" minH="3rem" colorScheme="orange" onClick={handleSignIn} data-gtm="conectar-strava">Conectar no Strava</Button>}
 					</Flex>
 				</Box>
 
