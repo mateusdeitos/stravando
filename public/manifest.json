@@ -1,0 +1,17 @@
+{
+	"name": "Stravando App",
+	"short_name": "Stravando",
+	"icons": [
+	  {
+		"src": "/favicon.png",
+		"sizes": "192x192",
+		"type": "image/png",
+		"purpose": "any maskable"
+	  }
+	],
+	"theme_color": "#fc5200",
+	"background_color": "#181B23",
+	"start_url": "/",
+	"display": "standalone",
+	"orientation": "portrait"
+  }
