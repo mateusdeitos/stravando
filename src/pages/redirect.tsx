@@ -25,7 +25,7 @@ const Redirect = () => {
 
 	}, [count, session])
 	return (
-		<PageWrapper>
+		<PageWrapper title="Redirecting | Stravando">
 			<Flex flex="1" alignItems="center" justifyContent="center" direction="column">
 				<Heading fontSize={["1.25rem", "2rem"]}>Sua sessão com o Strava foi encerrada, você será redirecionado para a página de login em {count}</Heading>
 				<Button mt="2rem" colorScheme="orange" onClick={() => signIn('strava', { callbackUrl: process.env.NEXT_PUBLIC_APP_URL })}>Redirecionar agora</Button>
