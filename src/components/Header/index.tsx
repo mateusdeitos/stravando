@@ -1,7 +1,7 @@
 import { Flex, Heading, HStack, VStack, Avatar, Tooltip, IconButton, Icon, Text, Button, useBreakpointValue } from "@chakra-ui/react"
 import { signIn, signOut, useSession } from "next-auth/client"
 import { useRouter } from "next/router"
-import React from "react"
+import React, { useState } from "react"
 import { FaSignOutAlt, FaStrava } from "react-icons/fa"
 import Link from 'next/link'
 
@@ -16,10 +16,11 @@ export const handleSignIn = async () => {
 
 export const Header = () => {
 	const isWideVersion = useBreakpointValue({ base: false, lg: true });
+	const [loadingSignIn, setLoadingSignIn] = useState(false);
 	const [session] = useSession();
 	const router = useRouter();
 	const handleSignOut = async () => {
-		signOut({ redirect: false, callbackUrl: '/' }).then(() => router.push("/"));
+		signOut({ callbackUrl: '/' })
 	}
 
 	return (
@@ -38,32 +39,48 @@ export const Header = () => {
 						) : (
 							!session && (
 								isWideVersion ? (
-									<Button leftIcon={<Icon as={FaStrava} />} colorScheme="brand" borderColor="brand.800"borderWidth={1} onClick={handleSignIn} data-gtm="conectar-strava-header">Conectar com Strava</Button>
+									<Button leftIcon={<Icon as={FaStrava} />} colorScheme="brand" borderColor="brand.800" borderWidth={1} isLoading={loadingSignIn} onClick={() => { setLoadingSignIn(true); handleSignIn(); }} data-gtm="conectar-strava-header">Conectar com Strava</Button>
 								) : (
 									<IconButton
 										borderColor="brand.800"
 										borderWidth={1}
 										colorScheme="brand"
 										icon={<Icon as={FaStrava} />}
-										onClick={handleSignIn}
 										aria-label="Conectar com Strava"
 										data-gtm="conectar-strava-header"
+										isLoading={loadingSignIn}
+										onClick={() => { setLoadingSignIn(true); handleSignIn(); }}
 									/>
 								)
 							)
 						)}
 					</VStack>
 					{!!session && (
-						<Tooltip hasArrow={isWideVersion} placement="bottom" bg="brand.200" label="Sair" isOpen={!isWideVersion}>
-							<IconButton
-								borderColor="brand.800"
-								borderWidth={1}
-								colorScheme="brand"
-								icon={<Icon as={FaSignOutAlt} />}
-								aria-label="Logout"
-								onClick={handleSignOut}
-								data-gtm="desconectar-strava-header"
-							/>
+						<Tooltip hasArrow placement="bottom" bg="brand.200" label="Sair">
+							{isWideVersion ? (
+								<IconButton
+									borderColor="brand.800"
+									borderWidth={1}
+									colorScheme="brand"
+									icon={<Icon as={FaSignOutAlt} />}
+									aria-label="Logout"
+									onClick={handleSignOut}
+									data-gtm="desconectar-strava-header"
+								/>
+							) : (
+								<Button
+									borderColor="brand.800"
+									borderWidth={1}
+									colorScheme="brand"
+									leftIcon={<Icon as={FaSignOutAlt} />}
+									aria-label="Logout"
+									onClick={handleSignOut}
+									data-gtm="desconectar-strava-header"
+									fontSize="0.75rem"
+								>
+									Sair
+								</Button>
+							)}
 						</Tooltip>
 					)}
 				</HStack>
