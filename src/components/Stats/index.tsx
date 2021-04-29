@@ -1,7 +1,7 @@
-import { Box, Heading, SimpleGrid, Stack, Icon, Image, Divider, Spinner, Switch, FormControl, FormLabel, IconButton, useBreakpointValue, IconButtonProps } from "@chakra-ui/react";
+import { Box, Heading, SimpleGrid, Stack, Icon, Image, Divider, Spinner, Switch, FormControl, FormLabel, IconButton,  IconButtonProps } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { FaBiking, FaRunning, FaShare, FaShareAlt, FaSwimmer } from "react-icons/fa";
+import { FaBiking, FaRunning, FaShareAlt, FaSwimmer } from "react-icons/fa";
 import { IconType } from "react-icons";
 import { DistanceData } from "../../pages";
 import { formatNumber } from "../../utils/format";
@@ -64,6 +64,7 @@ export const StatsComponent = ({ data, notFound = false }: StatsProps) => {
 				<SimpleGrid w="100%" columns={[1, 2]} gap="1rem" mt="1rem">
 					<ImageBlock image="/pool.svg" text="voltas em uma piscina olímpica" baseDistance={0.05} totalDistance={totalDistance} />
 					<ImageBlock image="/track.svg" text="voltas em uma pista de corrida" baseDistance={0.4} totalDistance={totalDistance} />
+					<ImageBlock image="/marathon.svg" text="Maratonas" baseDistance={42} totalDistance={totalDistance} />
 					<ImageBlock image="/tour-france.svg" text="Tour de France finalizados" baseDistance={3470} totalDistance={totalDistance} />
 					<ImageBlock image="/brasil.svg" text="vezes cruzando o Brasil de norte a sul" baseDistance={4320} totalDistance={totalDistance} />
 					<ImageBlock image="/everest.svg" text="subidas no Monte Everest" baseDistance={8849} totalDistance={totalDistance} />
@@ -110,7 +111,7 @@ const FilterBadge = ({ id, total, CustomIcon, onClick, selected }: FilterBadgePr
 			<Icon as={CustomIcon} data-gtm={id} boxSize="10" />
 			<Heading data-gtm={id} whiteSpace={["nowrap", "nowrap"]} fontSize={["0.75rem", "1rem"]}>{formattedTotal} km</Heading>
 			<FormControl d="flex" flexDirection="row-reverse" alignItems="center" justifyContent="flex-start">
-				<FormLabel cursor="pointer" htmlFor={`switch-${id}`} ml="0.5rem" mb="0" fontSize={["0.75rem", "1rem"]}>considerar?</FormLabel>
+				<FormLabel cursor="pointer" htmlFor={`switch-${id}`} ml="0.5rem" mb="0" fontSize={["0.75rem", "1rem"]}>somar?</FormLabel>
 				<Switch id={`switch-${id}`} data-gtm={id} onChange={onClick} size="sm" colorScheme="gray" defaultChecked />
 			</FormControl>
 		</Stack>
@@ -124,12 +125,11 @@ interface ImageBlockProps {
 }
 
 const ImageBlock = ({ image, text, totalDistance, baseDistance }: ImageBlockProps) => {
-	const isWideVersion = useBreakpointValue({ base: false, lg: true });
 	const distance = formatNumber(totalDistance / baseDistance);
 	const formattedBaseDistance = baseDistance < 1 ? formatNumber(baseDistance * 1000) + 'm' : formatNumber(baseDistance) + 'km';
 
 	return (
-		<Box pos="relative" w="100%" bgColor="gray.700" borderRadius="xl">
+		<Box pos="relative" w="100%" bgColor="gray.700" borderRadius="xl" overflow="hidden">
 			<Image src={image} alt={text} h="100%" w="100%" object-fit="cover" filter="brightness(50%)" />
 			<Heading fontSize={["1.25rem", "1.25rem", "2.25rem"]} pos="absolute" top="50%" left="50%" transform="translate(-50%, -50%)">
 				{distance} {text}
@@ -167,6 +167,7 @@ const ShareButton = ({ text, url = process.env.NEXT_PUBLIC_APP_URL, ...rest }: S
 			{...rest}
 			borderColor="brand.800"
 			borderWidth={1}
+			borderRadius="xl"
 			colorScheme="brand"
 			icon={<Icon as={FaShareAlt} />}
 			aria-label="Compartilhar"

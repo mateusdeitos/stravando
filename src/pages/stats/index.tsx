@@ -17,31 +17,41 @@ export const getServerSideProps: GetServerSideProps<StatsProps> = async (context
 	const session = await getSession(context);
 
 	api.defaults.headers.authorization = `Bearer ${session.account.accessToken}`;
-	const { data } = await api.get<DataProps>(`/athletes/${session.account.id}/stats`);
-	if (!session && !data) {
+	try {
+		const { data } = await api.get<DataProps>(`/athletes/${session.account.id}/stats`);
+		if (!data) {
+			return {
+				props: { data: null },
+				notFound: true,
+			}
+		}
+
+		return {
+			props: {
+				data: {
+					bike: {
+						biggest: (data.biggest_ride_distance || 0) / 1000,
+						total: (data.all_ride_totals.distance || 0) / 1000,
+					},
+					running: {
+						biggest: (data.biggest_run_distance || 0) / 1000,
+						total: (data.all_run_totals.distance || 0) / 1000,
+					},
+					swimming: {
+						biggest: (data.biggest_swim_distance || 0) / 1000,
+						total: (data.all_swim_totals.distance || 0) / 1000,
+					},
+				}
+			},
+		}
+	} catch (error) {
 		return {
 			props: { data: null },
-			notFound: true,
-		}
-	}
-
-	return {
-		props: {
-			data: {
-				bike: {
-					biggest: (data.biggest_ride_distance || 0) / 1000,
-					total: (data.all_ride_totals.distance || 0) / 1000,
-				},
-				running: {
-					biggest: (data.biggest_run_distance || 0) / 1000,
-					total: (data.all_run_totals.distance || 0) / 1000,
-				},
-				swimming: {
-					biggest: (data.biggest_swim_distance || 0) / 1000,
-					total: (data.all_swim_totals.distance || 0) / 1000,
-				},
+			redirect: {
+				destination: error.statusCode === 401 ? '/redirect' : "/",
+				permanent: false,
 			}
-		},
+		}
 	}
 }
 
