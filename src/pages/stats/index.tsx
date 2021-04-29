@@ -45,10 +45,19 @@ export const getServerSideProps: GetServerSideProps<StatsProps> = async (context
 			},
 		}
 	} catch (error) {
+		let destination = "/";
+		if (error.statusCode === 401) {
+			destination = "/redirect";
+		}
+
+		if (error.statusCode === 429) {
+			destination = "/too-many-requests";
+		}
+
 		return {
 			props: { data: null },
 			redirect: {
-				destination: error.statusCode === 401 ? '/redirect' : "/",
+				destination,
 				permanent: false,
 			}
 		}
