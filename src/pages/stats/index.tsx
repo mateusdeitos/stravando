@@ -2,13 +2,14 @@ import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/client";
 import React from "react";
 import { api, DataProps } from "../../../services/api";
+import { PageWrapper } from "../../components/PageWrapper";
 import { StatsComponent, StatsProps } from "../../components/Stats";
 
 const Stats = ({ data, notFound = false }: StatsProps) => {
 	return (
-		<>
+		<PageWrapper title="Home | Stravando">
 			<StatsComponent data={data} notFound={notFound} />
-		</>
+		</PageWrapper>
 	)
 }
 

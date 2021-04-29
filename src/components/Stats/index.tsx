@@ -1,10 +1,9 @@
-import { Box, Heading, SimpleGrid, Stack, Icon, Image, Divider, Spinner, Switch, FormControl, FormLabel } from "@chakra-ui/react";
+import { Box, Heading, SimpleGrid, Stack, Icon, Image, Divider, Spinner, Switch, FormControl, FormLabel, IconButton, useBreakpointValue, IconButtonProps } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import { FaBiking, FaRunning, FaShare, FaShareAlt, FaSwimmer } from "react-icons/fa";
 import { IconType } from "react-icons";
-import { FaBiking, FaRunning, FaSwimmer } from "react-icons/fa";
 import { DistanceData } from "../../pages";
-import { PageWrapper } from "../PageWrapper";
 import { formatNumber } from "../../utils/format";
 
 export interface StatsProps {
@@ -18,7 +17,6 @@ export const StatsComponent = ({ data, notFound = false }: StatsProps) => {
 	const router = useRouter();
 	const [totalDistance, setTotalDistance] = useState(0);
 	const [selectedModes, setSelectedModes] = useState<Modes>({ bike: true, running: true, swimming: true });
-	const pageTitle = "Stats | Stravando";
 
 	useEffect(() => {
 		if (notFound) {
@@ -45,41 +43,38 @@ export const StatsComponent = ({ data, notFound = false }: StatsProps) => {
 
 	if (router.isFallback) {
 		return (
-			<PageWrapper title={pageTitle}>
-				<Spinner />
-			</PageWrapper>
+			<Spinner />
 		)
 	}
 
 	return (
-		<PageWrapper title={pageTitle}>
-			{data ? (
-				<>
-					<Heading fontSize={["1.5rem", "3rem"]}>Meus stats...</Heading>
-					<Stack direction={["column", "row"]} spacing={["0.5rem", "1rem"]} mt="1rem" w="100%" alignItems="center" justifyContent="center">
-						<FilterBadge id="filter-badge-stats-bike" selected={selectedModes.bike} total={data?.bike?.total || 0} CustomIcon={FaBiking} onClick={() => setSelectedModes({ ...selectedModes, bike: !selectedModes.bike })} />
-						<FilterBadge id="filter-badge-stats-running" selected={selectedModes.running} total={data?.running?.total || 0} CustomIcon={FaRunning} onClick={() => setSelectedModes({ ...selectedModes, running: !selectedModes.running })} />
-						<FilterBadge id="filter-badge-stats-swimming" selected={selectedModes.swimming} total={data?.swimming?.total || 0} CustomIcon={FaSwimmer} onClick={() => setSelectedModes({ ...selectedModes, swimming: !selectedModes.swimming })} />
-					</Stack>
-					<Heading fontSize="0.75rem" fontWeight="normal" mt="0.5rem">Total</Heading>
-					<Heading fontSize={["1.25rem", "2rem"]} textAlign="center" >{formatNumber(totalDistance)} km</Heading>
-					<Heading fontSize="0.75rem" fontWeight="normal">{selectedModesString()}</Heading>
-					<Divider mt="1rem" />
-					<Heading fontSize={["1rem", "1.5rem"]} fontWeight="600" mt="1rem">Com essa distância você já fez:</Heading>
-					<SimpleGrid w="100%" columns={[1, 2]} gap="1rem" mt="1rem">
-						<ImageBlock image="/pool.svg" text="voltas em uma piscina olímpica" baseDistance={0.05} totalDistance={totalDistance} />
-						<ImageBlock image="/track.svg" text="voltas em uma pista de corrida" baseDistance={0.4} totalDistance={totalDistance} />
-						<ImageBlock image="/tour-france.svg" text="Tour de France finalizados" baseDistance={3470} totalDistance={totalDistance} />
-						<ImageBlock image="/brasil.svg" text="vezes cruzando o Brasil de norte a sul" baseDistance={4320} totalDistance={totalDistance} />
-						<ImageBlock image="/everest.svg" text="subidas no Monte Everest" baseDistance={8849} totalDistance={totalDistance} />
-						<ImageBlock image="/earth.svg" text="voltas ao redor da Terra" baseDistance={40000} totalDistance={totalDistance} />
-						<ImageBlock image="/moon.svg" text="viagens até a Lua" baseDistance={384400} totalDistance={totalDistance} />
-					</SimpleGrid>
-				</>
-			) : (
-				<Spinner />
-			)}
-		</PageWrapper>
+		data ? (
+			<>
+				<Heading fontSize={["1.5rem", "3rem"]}>Meus stats...</Heading>
+				<Stack direction={["column", "row"]} spacing={["0.5rem", "1rem"]} mt="1rem" w="100%" alignItems="center" justifyContent="center">
+					<FilterBadge id="filter-badge-stats-bike" selected={selectedModes.bike} total={data?.bike?.total || 0} CustomIcon={FaBiking} onClick={() => setSelectedModes({ ...selectedModes, bike: !selectedModes.bike })} />
+					<FilterBadge id="filter-badge-stats-running" selected={selectedModes.running} total={data?.running?.total || 0} CustomIcon={FaRunning} onClick={() => setSelectedModes({ ...selectedModes, running: !selectedModes.running })} />
+					<FilterBadge id="filter-badge-stats-swimming" selected={selectedModes.swimming} total={data?.swimming?.total || 0} CustomIcon={FaSwimmer} onClick={() => setSelectedModes({ ...selectedModes, swimming: !selectedModes.swimming })} />
+				</Stack>
+				<Heading fontSize="0.75rem" fontWeight="normal" mt="0.5rem">Total</Heading>
+				<Heading fontSize={["1.25rem", "2rem"]} textAlign="center" >{formatNumber(totalDistance)} km</Heading>
+				<Heading fontSize="0.75rem" fontWeight="normal">{selectedModesString()}</Heading>
+				<Divider mt="1rem" />
+				<Heading fontSize={["1rem", "1.5rem"]} fontWeight="600" mt="1rem">Com essa distância você já fez:</Heading>
+				<SimpleGrid w="100%" columns={[1, 2]} gap="1rem" mt="1rem">
+					<ImageBlock image="/pool.svg" text="voltas em uma piscina olímpica" baseDistance={0.05} totalDistance={totalDistance} />
+					<ImageBlock image="/track.svg" text="voltas em uma pista de corrida" baseDistance={0.4} totalDistance={totalDistance} />
+					<ImageBlock image="/tour-france.svg" text="Tour de France finalizados" baseDistance={3470} totalDistance={totalDistance} />
+					<ImageBlock image="/brasil.svg" text="vezes cruzando o Brasil de norte a sul" baseDistance={4320} totalDistance={totalDistance} />
+					<ImageBlock image="/everest.svg" text="subidas no Monte Everest" baseDistance={8849} totalDistance={totalDistance} />
+					<ImageBlock image="/earth.svg" text="voltas ao redor da Terra" baseDistance={40000} totalDistance={totalDistance} />
+					<ImageBlock image="/moon.svg" text="viagens até a Lua" baseDistance={384400} totalDistance={totalDistance} />
+				</SimpleGrid>
+			</>
+		) : (
+			<Spinner />
+		)
+
 	)
 }
 
@@ -129,6 +124,7 @@ interface ImageBlockProps {
 }
 
 const ImageBlock = ({ image, text, totalDistance, baseDistance }: ImageBlockProps) => {
+	const isWideVersion = useBreakpointValue({ base: false, lg: true });
 	const distance = formatNumber(totalDistance / baseDistance);
 	const formattedBaseDistance = baseDistance < 1 ? formatNumber(baseDistance * 1000) + 'm' : formatNumber(baseDistance) + 'km';
 
@@ -139,6 +135,43 @@ const ImageBlock = ({ image, text, totalDistance, baseDistance }: ImageBlockProp
 				{distance} {text}
 				<Heading as="p" fontSize="1rem" textAlign="center">({formattedBaseDistance})</Heading>
 			</Heading>
+			<ShareButton pos="absolute" bottom="0%" aria-label="Compartilhar" text={`${distance} ${text}`} />
 		</Box>
 	)
+}
+
+interface ShareButtonProps extends IconButtonProps {
+	text: string;
+	url?: string;
+}
+
+const ShareButton = ({ text, url = process.env.NEXT_PUBLIC_APP_URL, ...rest }: ShareButtonProps) => {
+	const handleShare = () => {
+		if (navigator.share) {
+			navigator
+				.share({
+					title: "Meus stats no Stravando",
+					text: `Olha que top, fiz ${text}!`,
+					url,
+				})
+				.then(() => {
+					console.log('Successfully shared');
+				})
+				.catch(error => {
+					console.error('Something went wrong sharing the blog', error);
+				});
+		}
+	}
+	return (
+		<IconButton
+			{...rest}
+			borderColor="brand.800"
+			borderWidth={1}
+			colorScheme="brand"
+			icon={<Icon as={FaShareAlt} />}
+			aria-label="Compartilhar"
+			data-gtm="share-button"
+			onClick={handleShare}
+		/>
+	);
 }
