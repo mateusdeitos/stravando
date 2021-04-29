@@ -151,7 +151,7 @@ const ShareButton = ({ text, url = process.env.NEXT_PUBLIC_APP_URL, ...rest }: S
 			navigator
 				.share({
 					title: "Meus stats no Stravando",
-					text: `Olha que top, fiz ${text}!`,
+					text: `Olha que top, fiz ${text}!\n\nStravando`,
 					url,
 				})
 				.then(() => {
