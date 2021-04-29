@@ -1,12 +1,13 @@
 import { GetStaticProps } from "next";
 import React from "react";
+import { PageWrapper } from "../../components/PageWrapper";
 import { StatsComponent, StatsProps } from "../../components/Stats";
 
 const Demo = ({ data, notFound = false }: StatsProps) => {
 	return (
-		<>
+		<PageWrapper title="Demo | Stravando">
 			<StatsComponent data={data} notFound={notFound} />
-		</>
+		</PageWrapper>
 	)
 }
 
