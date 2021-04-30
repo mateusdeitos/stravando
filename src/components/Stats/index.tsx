@@ -8,6 +8,7 @@ import { formatNumber } from "../../utils/format";
 
 export interface StatsProps {
 	data: DistanceData;
+	error?: unknown;
 	notFound?: boolean;
 }
 

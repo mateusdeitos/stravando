@@ -4,9 +4,10 @@ import { getSession } from "next-auth/client";
 import React from "react";
 import { DistanceData } from "..";
 import { PageWrapper } from "../../components/PageWrapper";
-import {StatsComponent, StatsProps } from "../../components/Stats";
+import { StatsComponent, StatsProps } from "../../components/Stats";
 
-const Stats = ({ data, notFound = false }: StatsProps) => {
+const Stats = ({ data, notFound = false, error }: StatsProps) => {
+	console.log(error);
 	return (
 		<PageWrapper title="Home | Stravando">
 			<StatsComponent data={data} notFound={notFound} />
@@ -43,7 +44,7 @@ export const getServerSideProps: GetServerSideProps<StatsProps> = async (context
 		}
 
 		return {
-			props: { data: null },
+			props: { data: null, error },
 			redirect: {
 				destination,
 				permanent: false,
