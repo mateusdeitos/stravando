@@ -25,7 +25,7 @@ export const StatsComponent = ({ data, notFound = false }: StatsProps) => {
 
 		if (data) {
 			setTotalDistance(Object.entries(selectedModes).reduce((acc, [key, selected]) => {
-				const val = selected ? (data[key].total || 0) : 0;
+				const val = selected ? (data[key]?.total || 0) : 0;
 				return acc += val;
 			}, 0));
 		}
