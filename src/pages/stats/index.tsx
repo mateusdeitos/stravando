@@ -19,7 +19,7 @@ export const getServerSideProps: GetServerSideProps<StatsProps> = async (context
 	const session = await getSession(context);
 
 	try {
-		const { data } = await axios.get<DistanceData>(`/api/athlete?id=${session.account.id}&accessToken=${session.account.accessToken}&name=${session.user.name}`)
+		const { data } = await axios.get<DistanceData>(`${process.env.NEXTAUTH_URL}/api/athlete?id=${session.account.id}&accessToken=${session.account.accessToken}&name=${session.user.name}`)
 		if (!data) {
 			return {
 				props: { data: null },
