@@ -1,4 +1,4 @@
-import { Box, Heading, SimpleGrid, Stack, Icon, Image, Divider, Spinner, Switch, FormControl, FormLabel, IconButton, IconButtonProps } from "@chakra-ui/react";
+import { Box, Heading, SimpleGrid, Stack, Icon, Image, Divider, Spinner, Switch, FormControl, FormLabel, IconButton, IconButtonProps, Tooltip } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { FaBiking, FaRunning, FaShareAlt, FaSwimmer } from "react-icons/fa";
@@ -139,7 +139,7 @@ const ImageBlock = ({ image, text, totalDistance, baseDistance, shareText }: Ima
 				{parseText(text)}
 				<Heading as="p" fontSize="1rem" textAlign="center">({formattedBaseDistance})</Heading>
 			</Heading>
-			<ShareButton pos="absolute" bottom="0%" aria-label="Compartilhar" text={parseText(shareText)} distance={distance} />
+			<ShareButton pos="absolute" top="0%" right="0%" aria-label="Compartilhar" text={parseText(shareText)} distance={formatNumber(totalDistance)} />
 		</Box>
 	)
 }
@@ -168,16 +168,18 @@ const ShareButton = ({ text, distance, url = process.env.NEXT_PUBLIC_APP_URL, ..
 		}
 	}
 	return (
-		<IconButton
-			{...rest}
-			borderColor="brand.800"
-			borderWidth={1}
-			borderRadius="xl"
-			colorScheme="brand"
-			icon={<Icon as={FaShareAlt} />}
-			aria-label="Compartilhar"
-			data-gtm="share-button"
-			onClick={handleShare}
-		/>
+		<Tooltip hasArrow label="Compartilhar" bg="brand.500" placement="left">
+			<IconButton
+				{...rest}
+				borderColor="brand.800"
+				borderWidth={1}
+				borderRadius="xl"
+				colorScheme="brand"
+				icon={<Icon as={FaShareAlt} />}
+				aria-label="Compartilhar"
+				data-gtm="share-button"
+				onClick={handleShare}
+			/>
+		</Tooltip>
 	);
 }
