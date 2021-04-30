@@ -1,10 +1,11 @@
 import { Button, Avatar, Heading, Spinner, Icon, VStack, Box, Image, Spacer, Flex, useBreakpointValue } from "@chakra-ui/react"
 import { useSession, } from 'next-auth/client'
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import Link from 'next/link'
 import { FaChartLine, FaDumbbell, FaStrava } from 'react-icons/fa'
 import { PageWrapper } from "../components/PageWrapper"
 import { handleSignIn } from "../components/Header"
+import { useRouter } from "next/router"
 
 interface DistanceProps {
 	biggest: number;
@@ -21,6 +22,7 @@ export default function Home() {
 	const [session, loading] = useSession();
 	const [loadingSignIn, setLoadingSignIn] = useState(false);
 	const pageTitle = "Home | Stravando";
+
 	if (loading) {
 		return (
 			<PageWrapper title={pageTitle}>
@@ -40,7 +42,7 @@ export default function Home() {
 								<Avatar showBorder borderColor="brand.500" size="2xl" src={session.user.image} name={session.user.name} />
 								<Heading fontSize={["1.25rem", "2rem"]} w="100%" textAlign="center" mt="1rem">Olá, {session.account.athlete.firstname} {session.account.athlete.lastname}</Heading>
 								{!isWideVersion && <Spacer />}
-								<Link href="/stats"><Button as="a" cursor="pointer" leftIcon={<Icon as={FaDumbbell} />} mt="6" minH="3rem" colorScheme="orange" data-gtm="ver-meus-stats" >Ver meus stats</Button></Link>
+								<Link href="/stats/"><Button as="a" cursor="pointer" leftIcon={<Icon as={FaDumbbell} />} mt="6" minH="3rem" colorScheme="orange" data-gtm="ver-meus-stats" >Ver meus stats</Button></Link>
 							</>
 						) : (
 							<>

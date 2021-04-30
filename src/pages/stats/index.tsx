@@ -1,9 +1,10 @@
+import axios from "axios";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/client";
 import React from "react";
-import { api, DataProps } from "../../../services/api";
+import { DistanceData } from "..";
 import { PageWrapper } from "../../components/PageWrapper";
-import { StatsComponent, StatsProps } from "../../components/Stats";
+import {StatsComponent, StatsProps } from "../../components/Stats";
 
 const Stats = ({ data, notFound = false }: StatsProps) => {
 	return (
@@ -16,9 +17,8 @@ const Stats = ({ data, notFound = false }: StatsProps) => {
 export const getServerSideProps: GetServerSideProps<StatsProps> = async (context) => {
 	const session = await getSession(context);
 
-	api.defaults.headers.authorization = `Bearer ${session.account.accessToken}`;
 	try {
-		const { data } = await api.get<DataProps>(`/athletes/${session.account.id}/stats`);
+		const { data } = await axios.get<DistanceData>(`http://localhost:3000/api/athlete?id=${session.account.id}&accessToken=${session.account.accessToken}&name=${session.user.name}`)
 		if (!data) {
 			return {
 				props: { data: null },
@@ -28,27 +28,24 @@ export const getServerSideProps: GetServerSideProps<StatsProps> = async (context
 
 		return {
 			props: {
-				data: {
-					bike: {
-						biggest: (data.biggest_ride_distance || 0) / 1000,
-						total: (data.all_ride_totals.distance || 0) / 1000,
-					},
-					running: {
-						biggest: (data.biggest_run_distance || 0) / 1000,
-						total: (data.all_run_totals.distance || 0) / 1000,
-					},
-					swimming: {
-						biggest: (data.biggest_swim_distance || 0) / 1000,
-						total: (data.all_swim_totals.distance || 0) / 1000,
-					},
-				}
+				data
 			},
 		}
 	} catch (error) {
+		console.log('deu erro', error.statusCode)
+		let destination = "/";
+		if (error.statusCode === 401) {
+			destination = "/redirect";
+		}
+
+		if (error.statusCode === 429) {
+			destination = "/too-many-requests";
+		}
+
 		return {
 			props: { data: null },
 			redirect: {
-				destination: error.statusCode === 401 ? '/redirect' : "/",
+				destination,
 				permanent: false,
 			}
 		}
