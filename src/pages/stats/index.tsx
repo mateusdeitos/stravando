@@ -45,10 +45,10 @@ export const getServerSideProps: GetServerSideProps<StatsProps> = async (context
 
 		return {
 			props: { data: null, error },
-			redirect: {
-				destination,
-				permanent: false,
-			}
+			// redirect: {
+			// 	destination,
+			// 	permanent: false,
+			// }
 		}
 	}
 }
