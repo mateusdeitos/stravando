@@ -1,8 +1,9 @@
 import dbConnect from "../../utils/mongodb";
 import Athlete from "../../models/Athlete";
 import { api, DataProps } from "../../../services/api";
+import { NextApiRequest, NextApiResponse } from "next";
 
-export default async (req, res) => {
+export default async (req: NextApiRequest, res: NextApiResponse) => {
 
 	const dataExpired = (timestamp: number) => {
 		return (Date.now() - timestamp) / (1000 * 60 * 60) > 24 || !timestamp;
@@ -50,7 +51,7 @@ export default async (req, res) => {
 		api.defaults.headers.authorization = `Bearer ${accessToken}`;
 		const { data } = await api.get<DataProps>(`/athletes/${id}/stats`);
 		if (!data) {
-			return res.status(404).send();
+			return res.status(404).send({ message: "Athlete not found" });
 		}
 
 		const formattedData = formatData(data);
