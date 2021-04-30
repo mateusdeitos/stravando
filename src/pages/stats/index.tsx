@@ -18,7 +18,7 @@ export const getServerSideProps: GetServerSideProps<StatsProps> = async (context
 	const session = await getSession(context);
 
 	try {
-		const { data } = await axios.get<DistanceData>(`http://localhost:3000/api/athlete?id=${session.account.id}&accessToken=${session.account.accessToken}&name=${session.user.name}`)
+		const { data } = await axios.get<DistanceData>(`/api/athlete?id=${session.account.id}&accessToken=${session.account.accessToken}&name=${session.user.name}`)
 		if (!data) {
 			return {
 				props: { data: null },
@@ -44,10 +44,10 @@ export const getServerSideProps: GetServerSideProps<StatsProps> = async (context
 
 		return {
 			props: { data: null },
-			// redirect: {
-			// 	destination,
-			// 	permanent: false,
-			// }
+			redirect: {
+				destination,
+				permanent: false,
+			}
 		}
 	}
 }
