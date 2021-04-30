@@ -1,4 +1,4 @@
-import { Box, Heading, SimpleGrid, Stack, Icon, Image, Divider, Spinner, Switch, FormControl, FormLabel, IconButton,  IconButtonProps } from "@chakra-ui/react";
+import { Box, Heading, SimpleGrid, Stack, Icon, Image, Divider, Spinner, Switch, FormControl, FormLabel, IconButton, IconButtonProps } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { FaBiking, FaRunning, FaShareAlt, FaSwimmer } from "react-icons/fa";
@@ -61,16 +61,16 @@ export const StatsComponent = ({ data, notFound = false }: StatsProps) => {
 				<Heading fontSize={["1.25rem", "2rem"]} textAlign="center" >{formatNumber(totalDistance)} km</Heading>
 				<Heading fontSize="0.75rem" fontWeight="normal">{selectedModesString()}</Heading>
 				<Divider mt="1rem" />
-				<Heading fontSize={["1rem", "1.5rem"]} fontWeight="600" mt="1rem">Com essa distância você já fez:</Heading>
+				<Heading fontSize={["1rem", "1.5rem"]} fontWeight="600" mt="1rem">Com essa distância você já:</Heading>
 				<SimpleGrid w="100%" columns={[1, 2]} gap="1rem" mt="1rem">
-					<ImageBlock image="/pool.svg" text="voltas em uma piscina olímpica" baseDistance={0.05} totalDistance={totalDistance} />
-					<ImageBlock image="/track.svg" text="voltas em uma pista de corrida" baseDistance={0.4} totalDistance={totalDistance} />
-					<ImageBlock image="/marathon.svg" text="Maratonas" baseDistance={42} totalDistance={totalDistance} />
-					<ImageBlock image="/tour-france.svg" text="Tour de France finalizados" baseDistance={3470} totalDistance={totalDistance} />
-					<ImageBlock image="/brasil.svg" text="vezes cruzando o Brasil de norte a sul" baseDistance={4320} totalDistance={totalDistance} />
-					<ImageBlock image="/everest.svg" text="subidas no Monte Everest" baseDistance={8849} totalDistance={totalDistance} />
-					<ImageBlock image="/earth.svg" text="voltas ao redor da Terra" baseDistance={40000} totalDistance={totalDistance} />
-					<ImageBlock image="/moon.svg" text="viagens até a Lua" baseDistance={384400} totalDistance={totalDistance} />
+					<ImageBlock image="/pool.svg" shareText="fiz $value voltas em uma piscina olímpica" text="deu $value voltas em uma piscina olímpica" baseDistance={0.05} totalDistance={totalDistance} />
+					<ImageBlock image="/track.svg" shareText="fiz $value voltas em uma pista de corrida" text="deu $value voltas em uma pista de corrida" baseDistance={0.4} totalDistance={totalDistance} />
+					<ImageBlock image="/marathon.svg" shareText="fiz $value Maratonas" text="fez $value Maratonas" baseDistance={42} totalDistance={totalDistance} />
+					<ImageBlock image="/tour-france.svg" shareText="fiz $value Tour de France" text="fez $value Tour de France" baseDistance={3470} totalDistance={totalDistance} />
+					<ImageBlock image="/brasil.svg" shareText="cruzei o Brasil de norte a sul $value vezes" text="cruzou o Brasil de norte a sul $value vezes" baseDistance={4320} totalDistance={totalDistance} />
+					<ImageBlock image="/everest.svg" shareText="subi $value vezes o Monte Everest" text="fez $value subidas no Monte Everest" baseDistance={8849} totalDistance={totalDistance} />
+					<ImageBlock image="/earth.svg" shareText="dei $value voltas ao redor da Terra" text="deu $value voltas ao redor da Terra" baseDistance={40000} totalDistance={totalDistance} />
+					<ImageBlock image="/moon.svg" shareText="fiz $value viagens até a Lua" text="fez $value viagens até a Lua" baseDistance={384400} totalDistance={totalDistance} />
 				</SimpleGrid>
 			</>
 		) : (
@@ -120,23 +120,26 @@ const FilterBadge = ({ id, total, CustomIcon, onClick, selected }: FilterBadgePr
 }
 interface ImageBlockProps {
 	image: string;
+	shareText: string;
 	text: string;
 	baseDistance: number;
 	totalDistance: number;
 }
 
-const ImageBlock = ({ image, text, totalDistance, baseDistance }: ImageBlockProps) => {
+const ImageBlock = ({ image, text, totalDistance, baseDistance, shareText }: ImageBlockProps) => {
 	const distance = formatNumber(totalDistance / baseDistance);
 	const formattedBaseDistance = baseDistance < 1 ? formatNumber(baseDistance * 1000) + 'm' : formatNumber(baseDistance) + 'km';
-
+	const parseText = (baseText: string) => {
+		return baseText.replace("$value", String(distance));
+	}
 	return (
 		<Box pos="relative" w="100%" bgColor="gray.700" borderRadius="xl" overflow="hidden">
 			<Image src={image} alt={text} h="100%" w="100%" object-fit="cover" filter="brightness(50%)" />
 			<Heading fontSize={["1.25rem", "1.25rem", "2.25rem"]} pos="absolute" top="50%" left="50%" transform="translate(-50%, -50%)">
-				{distance} {text}
+				{parseText(text)}
 				<Heading as="p" fontSize="1rem" textAlign="center">({formattedBaseDistance})</Heading>
 			</Heading>
-			<ShareButton pos="absolute" bottom="0%" aria-label="Compartilhar" text={`${distance} ${text}`} />
+			<ShareButton pos="absolute" bottom="0%" aria-label="Compartilhar" text={parseText(shareText)} distance={distance} />
 		</Box>
 	)
 }
@@ -144,15 +147,16 @@ const ImageBlock = ({ image, text, totalDistance, baseDistance }: ImageBlockProp
 interface ShareButtonProps extends IconButtonProps {
 	text: string;
 	url?: string;
+	distance: string;
 }
 
-const ShareButton = ({ text, url = process.env.NEXT_PUBLIC_APP_URL, ...rest }: ShareButtonProps) => {
+const ShareButton = ({ text, distance, url = process.env.NEXT_PUBLIC_APP_URL, ...rest }: ShareButtonProps) => {
 	const handleShare = () => {
 		if (navigator.share) {
 			navigator
 				.share({
 					title: "Meus stats no Stravando",
-					text: `Olha que top, fiz ${text}!\n\nStravando`,
+					text: `Olha que top, percorri ${distance}km no Strava, é a mesma coisa que dizer que eu ${text}!\n\nStravando`,
 					url,
 				})
 				.then(() => {
