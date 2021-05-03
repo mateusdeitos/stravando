@@ -22,6 +22,7 @@ export default class MyDocument extends Document {
 					<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
 					<link rel="manifest" href="/manifest.json" />
 					<meta name="msapplication-TileColor" content="#fc5200" />
+					<meta name="theme-color" content="#fc5200" />
 					<meta name="msapplication-TileImage" content="/ms-icon-144x144.png" />
 
 					<meta name='twitter:card' content='summary' />

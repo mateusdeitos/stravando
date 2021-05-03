@@ -1,6 +1,6 @@
-import dbConnect from "../../utils/mongodb";
-import Athlete from "../../models/Athlete";
-import { api, DataProps } from "../../../services/api";
+import dbConnect from "../../../utils/mongodb";
+import Athlete from "../../../models/Athlete";
+import { api, DataProps } from "../../../../services/api";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
@@ -26,7 +26,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 		}
 	}
 	try {
-		const { id, accessToken, name } = req.query;
+		const { id } = req.query;
+		const accessToken = req.headers.authorization;
 
 		await dbConnect().then(() => console.log('conectou no db dentro da api routes'))
 		const athlete = await Athlete.findOne({ idUser: id });
@@ -48,7 +49,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 			});
 		}
 
-		api.defaults.headers.authorization = `Bearer ${accessToken}`;
+		api.defaults.headers.authorization = accessToken;
 		const { data } = await api.get<DataProps>(`/athletes/${id}/stats`);
 		if (!data) {
 			return res.status(404).send({ message: "Athlete not found" });
