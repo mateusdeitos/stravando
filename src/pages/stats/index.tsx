@@ -22,13 +22,13 @@ const Stats = () => {
 				})
 				.then(({ data }) => setData(data))
 				.catch(error => {
-					console.log('deu erro', error.statusCode)
+					console.log('deu erro', {error})
 					let destination = "/";
-					if (error.statusCode === 401) {
+					if (error?.isAxiosError && error.response.status === 401) {
 						destination = "/redirect";
 					}
 
-					if (error.statusCode === 429) {
+					if (error?.isAxiosError && error.response.status === 429) {
 						destination = "/too-many-requests";
 					}
 					router.push(destination);

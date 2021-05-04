@@ -60,7 +60,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 		await Athlete.updateOne({
 			idUser: id
 		}, {
-			name,
 			idUser: id,
 			bike_total: formattedData.bike.total,
 			bike_biggest: formattedData.bike.biggest,
@@ -76,6 +75,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 		res.status(200).json(formattedData);
 	} catch (error) {
 		console.log(error);
-		res.status(400).send(error);
+		if (error?.isAxiosError) {
+			res.status(error.response.status).send(error);
+		} else {
+			res.status(400).send(error);
+		}
 	}
 }
