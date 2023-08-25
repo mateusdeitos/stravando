@@ -1,6 +1,5 @@
 import { api, DataProps } from "../../../../services/api";
-import { NextApiRequest, NextApiResponse } from "next";
-import { CacheInMemory } from "../../../utils/CacheInMemory";
+import { cacheRoute } from "../../../utils/cacheRoute";
 
 type Stat = {
 	biggest: number;
@@ -9,28 +8,11 @@ type Stat = {
 
 type Stats = Record<"bike" | "run" | "swim", Stat>;
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
-	const formatData = (data): Stats => {
-		return {
-			bike: {
-				biggest: (data.biggest_ride_distance || 0) / 1000,
-				total: (data.all_ride_totals.distance || 0) / 1000,
-			},
-			run: {
-				biggest: (data.biggest_run_distance || 0) / 1000,
-				total: (data.all_run_totals.distance || 0) / 1000,
-			},
-			swim: {
-				biggest: (data.biggest_swim_distance || 0) / 1000,
-				total: (data.all_swim_totals.distance || 0) / 1000,
-			},
-		};
-	};
+export default cacheRoute(async (cache, req, res) => {
 	try {
 		const { id } = req.query;
 		const accessToken = req.headers.authorization;
 
-		const cache = CacheInMemory.getInstance();
 		const key = `/athletes/${id}/stats`;
 		let stats: Stats = cache.get<Stats>(key);
 		if (!stats) {
@@ -56,4 +38,21 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 			res.status(400).send(error);
 		}
 	}
+});
+
+const formatData = (data: DataProps): Stats => {
+	return {
+		bike: {
+			biggest: (data.biggest_ride_distance || 0) / 1000,
+			total: (data.all_ride_totals.distance || 0) / 1000,
+		},
+		run: {
+			biggest: (data.biggest_run_distance || 0) / 1000,
+			total: (data.all_run_totals.distance || 0) / 1000,
+		},
+		swim: {
+			biggest: (data.biggest_swim_distance || 0) / 1000,
+			total: (data.all_swim_totals.distance || 0) / 1000,
+		},
+	};
 };
