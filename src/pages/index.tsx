@@ -44,7 +44,13 @@ export default function Home() {
 
 	return (
 		<PageWrapper title={pageTitle} direction="column" spacing="6">
-			<VStack d="flex" direction="column" flex="1" alignItems="center" w="100%">
+			<VStack
+				display="flex"
+				direction="column"
+				flex="1"
+				alignItems="center"
+				w="100%"
+			>
 				<Box pos="relative" w="100%" flex="1" bgColor="gray.700">
 					<Image
 						src="/hero.svg"

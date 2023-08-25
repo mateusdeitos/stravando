@@ -235,7 +235,7 @@ const FilterBadge = ({
 				{formattedTotal} km
 			</Heading>
 			<FormControl
-				d="flex"
+				display="flex"
 				flexDirection="row-reverse"
 				alignItems="center"
 				justifyContent="flex-start"
