@@ -36,3 +36,7 @@ yarn-error.log*
 #next-pwa
 **/public/workbox-*.js
 **/public/sw.js
+**/public/workbox-*.js.map
+**/public/sw.js.map
+
+.vscode
